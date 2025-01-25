@@ -7,7 +7,7 @@ const createTask = async (req, res) => {
   try {
     const { userId } = req.user;
 
-    const { title, team, stage, date, priority, assets } = req.body;
+    const { title, description, team, stage, date, priority, assets } = req.body;
 
     let text = "New task has been assigned to you";
     if (team?.length > 1) {
@@ -28,6 +28,7 @@ const createTask = async (req, res) => {
 
     const task = await Task.create({
       title,
+      description,
       team,
       stage: stage.toLowerCase(),
       date,
@@ -62,6 +63,7 @@ const duplicateTask = async (req, res) => {
       title: task.title + " - Duplicate",
     });
 
+    newTask.Description = task.description;
     newTask.team = task.team;
     newTask.subTasks = task.subTasks;
     newTask.assets = task.assets;
@@ -70,7 +72,6 @@ const duplicateTask = async (req, res) => {
 
     await newTask.save();
 
-    //alert users of the task
     let text = "New task has been assigned to you";
     if (task.team.length > 1) {
       text = text + ` and ${task.team.length - 1} others.`;

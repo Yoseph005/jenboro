@@ -20,6 +20,7 @@ const AddUser = ({ open, setOpen, userData }) => {
 
   const {
     register,
+      reset,
     handleSubmit,
     formState: { errors },
   } = useForm({ defaultValues });
@@ -44,6 +45,7 @@ const AddUser = ({ open, setOpen, userData }) => {
 
         toast.success("New user added successfully")
       }
+      reset();
       setTimeout(()=> {
         setOpen(false);
       },500)

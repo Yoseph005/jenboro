@@ -13,12 +13,12 @@ import {
 } from "react-icons/md";
 import { RxActivityLog } from "react-icons/rx";
 import { useParams } from "react-router-dom";
-import { toast } from "sonner";
 import { tasks } from "../assets/data";
 import Tabs from "../components/Tabs";
 import { PRIOTITYSTYELS, TASK_TYPE, getInitials } from "../utils";
 import Loading from "../components/Loader";
 import Button from "../components/Button";
+import {useGetAllTaskQuery} from "../redux/slices/api/taskApiSlice.js";
 
 const assets = [
   "https://images.pexels.com/photos/2418664/pexels-photo-2418664.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
@@ -89,8 +89,12 @@ const act_types = [
 const TaskDetails = () => {
   const { id } = useParams();
 
+  const {data, isLoading} = useGetAllTaskQuery({
+    strQuery: status, isTrashed:"", search:""
+  });
+
   const [selected, setSelected] = useState(0);
-  const task = tasks[3];
+  const task = data?.tasks.filter((el) => el._id === id)[0];
 
   return (
     <div className='w-full flex flex-col gap-3 mb-4 overflow-y-hidden'>
@@ -100,7 +104,6 @@ const TaskDetails = () => {
         {selected === 0 ? (
           <>
             <div className='w-full flex flex-col md:flex-row gap-5 2xl:gap-8 bg-white shadow-md p-8 overflow-y-auto'>
-              {/* LEFT */}
               <div className='w-full md:w-1/2 space-y-8'>
                 <div className='flex items-center gap-5'>
                   <div
@@ -115,12 +118,12 @@ const TaskDetails = () => {
                   </div>
 
                   <div className={clsx("flex items-center gap-2")}>
-                    <div
-                      className={clsx(
-                        "w-4 h-4 rounded-full",
-                        TASK_TYPE[task.stage]
-                      )}
-                    />
+                    {/*<div*/}
+                    {/*  className={clsx(*/}
+                    {/*    "w-4 h-4 rounded-full",*/}
+                    {/*    TASK_TYPE[task.stage]*/}
+                    {/*  )}*/}
+                    {/*/>*/}
                     <span className='text-black uppercase'>{task?.stage}</span>
                   </div>
                 </div>
@@ -201,7 +204,6 @@ const TaskDetails = () => {
                   </div>
                 </div>
               </div>
-              {/* RIGHT */}
               <div className='w-full md:w-1/2 space-y-8'>
                 <p className='text-lg font-semibold'>ASSETS</p>
 

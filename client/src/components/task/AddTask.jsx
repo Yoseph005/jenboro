@@ -10,8 +10,8 @@ import Button from "../Button";
 import { getStorage, ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { app } from "../../utils/firebase"; // Updated import statement
 import { toast } from "sonner";
-import { set } from "mongoose";
-import { useCreateTaskMutation, useUpdateTaskMutation } from "../../redux/slices/api/taskApiSlice"; // Import the hooks
+import { useCreateTaskMutation, useUpdateTaskMutation } from "../../redux/slices/api/taskApiSlice";
+import TextField from "../TextField.jsx"; // Import the hooks
 
 const LISTS = ["TODO", "IN PROGRESS", "COMPLETED"];
 const PRIORIRY = ["HIGH", "MEDIUM", "NORMAL", "LOW"];
@@ -22,9 +22,11 @@ const AddTask = ({ open, setOpen , task}) => {
 
   const {
     register,
+      reset,
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const [description, setDescription] = useState()
   const [team, setTeam] = useState(task?.team || []);
   const [stage, setStage] = useState(task?.stage?.toUpperCase() || LISTS[0]);
   const [priority, setPriority] = useState(
@@ -65,6 +67,7 @@ const AddTask = ({ open, setOpen , task}) => {
         ? await updateTask({ _id: task._id, ...newData }).unwrap()
         : await createTask(newData).unwrap();
       toast.success(res.message);
+      reset();
 
       setTimeout(() => {
         setOpen(false);
@@ -130,6 +133,15 @@ const AddTask = ({ open, setOpen , task}) => {
               className='w-full rounded'
               register={register("title", { required: "Title is required" })}
               error={errors.title ? errors.title.message : ""}
+            />
+            <TextField
+                placeholder="Project Description"
+                type="text"
+                name="description"
+                label="Task Description"
+                className="w-full rounded"
+                register={register("description", { required: "Description is required" })}
+                error={errors.description ? errors.description.message : ""}
             />
 
             <UserList setTeam={setTeam} team={team} />
