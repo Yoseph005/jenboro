@@ -12,6 +12,7 @@ import BoardView from "../components/BoardView";
 import { useGetAllTaskQuery } from "../redux/slices/api/taskApiSlice"; // Import the hook
 import Table from "../components/task/Table";
 import AddTask from "../components/task/AddTask";
+import {  useSelector } from "react-redux";
 
 const TABS = [
   { title: "Board View", icon: <MdGridView /> },
@@ -26,6 +27,8 @@ const TASK_TYPE = {
 
 const Tasks = () => {
   const params = useParams();
+  const { user } = useSelector((state) => state.auth);
+
 
   const [selected, setSelected] = useState(0);
   const [open, setOpen] = useState(false);
@@ -45,14 +48,16 @@ const Tasks = () => {
       <div className='flex items-center justify-between mb-4'>
         <Title title={status ? `${status} Tasks` : "Tasks"} />
 
-        {!status && (
-          <Button
+        {user?.isAdmin &&
+          !status && (
+            <Button
             onClick={() => setOpen(true)}
-            label='Create Task'
+            label='Create Project'
             icon={<IoMdAdd className='text-lg' />}
             className='flex flex-row-reverse gap-1 items-center bg-blue-600 text-white rounded-md py-2 2xl:py-2.5'
           />
-        )}
+          )
+            }
       </div>
 
       <Tabs tabs={TABS} setSelected={setSelected}>

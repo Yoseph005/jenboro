@@ -1,7 +1,7 @@
 import { duplicateTask, updateTask } from "../../../../../server/controllers/taskController";
 import { apiSlice } from "../apiSlice";
 
-const TASK_URL = "/user";
+const TASK_URL = "/task";
 
 export const taskApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({

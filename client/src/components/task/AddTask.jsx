@@ -78,7 +78,7 @@ const AddTask = ({ open, setOpen , task}) => {
   const handleSelect = (e) => {
     setAssets(e.target.files);
   };
-
+  
 
   const uploadFile = async (file) => {
     const storage = getStorage(app);
@@ -118,12 +118,12 @@ const AddTask = ({ open, setOpen , task}) => {
             as='h2'
             className='text-base font-bold leading-6 text-gray-900 mb-4'
           >
-            {task ? "UPDATE TASK" : "ADD TASK"}
+            {task ? "UPDATE TASK" : "ADD PROJECT"}
           </Dialog.Title>
 
           <div className='mt-2 flex flex-col gap-6'>
             <Textbox
-              placeholder='Task Title'
+              placeholder='Project Title'
               type='text'
               name='title'
               label='Task Title'
@@ -136,7 +136,7 @@ const AddTask = ({ open, setOpen , task}) => {
 
             <div className='flex gap-4'>
               <SelectList
-                label='Task Stage'
+                label='Project Stage'
                 lists={LISTS}
                 selected={stage}
                 setSelected={setStage}

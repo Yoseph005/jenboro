@@ -15,8 +15,11 @@ import Loading from "../components/Loader";
 import UserInfo from "../components/UserInfo";
 import { useGetDashboardStatsQuery } from "../redux/slices/api/taskApiSlice";
 import { BGS, PRIOTITYSTYELS, TASK_TYPE, getInitials } from "../utils";
+import { useSelector } from "react-redux";
 
 const TaskTable = ({ tasks }) => {
+  const { user } = useSelector((state) => state.auth);
+
   const ICONS = {
     high: <MdKeyboardDoubleArrowUp />,
     medium: <MdKeyboardArrowUp />,
@@ -33,6 +36,7 @@ const TaskTable = ({ tasks }) => {
       </tr>
     </thead>
   );
+
 
   const TableRow = ({ task }) => (
     <tr className='border-b border-gray-300 text-gray-600 hover:bg-gray-300/10'>
@@ -60,7 +64,10 @@ const TaskTable = ({ tasks }) => {
                 BGS[index % BGS.length]
               )}
             >
-              <UserInfo user={m} />
+              {user &&
+                  <UserInfo user={user} />
+                }
+
             </div>
           ))}
         </div>
