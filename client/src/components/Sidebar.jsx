@@ -1,7 +1,6 @@
 import React from "react";
 import {
   MdDashboard,
-  MdOutlineAddTask,
   MdOutlinePendingActions,
   MdSettings,
   MdTaskAlt,
@@ -17,48 +16,59 @@ const linkData = [
     label: "Dashboard",
     link: "dashboard",
     icon: <MdDashboard />,
+    permission: ["Administrator", "Architect", "Finance", "ProjectManager", "Forman"],
   },
   {
     label: "Tasks",
     link: "tasks",
     icon: <FaTasks />,
+    permission: [ "Architect", "Finance", "ProjectManager", "Forman"],
   },
   {
     label: "Completed",
     link: "completed/completed",
     icon: <MdTaskAlt />,
+    permission: [ "Architect", "Finance", "ProjectManager", "Forman"],
   },
   {
     label: "In Progress",
     link: "in-progress/in progress",
     icon: <MdOutlinePendingActions />,
+    permission: [ "Architect", "Finance", "ProjectManager", "Forman"],
   },
   {
     label: "To Do",
     link: "todo/todo",
     icon: <MdOutlinePendingActions />,
+    permission: [ "Architect", "Finance", "ProjectManager", "Forman"],
   },
   {
     label: "Users",
     link: "team",
     icon: <FaUsers />,
+    permission: ["Administrator"],
   },
   {
     label: "Trash",
     link: "trashed",
     icon: <FaTrashAlt />,
+    permission: ["ProjectManager"],
   },
 ];
 
 const Sidebar = () => {
   const { user } = useSelector((state) => state.auth);
 
+  console.log(user)
+
   const dispatch = useDispatch();
   const location = useLocation();
 
   const path = location.pathname.split("/")[1];
 
-  const sidebarLinks = user?.isAdmin ? linkData : linkData.slice(0, 5);
+  const sidebarLinks = linkData.filter((link) => link.permission.includes(user?.role));
+
+  // const sidebarLinks = user?.isAdmin ? linkData : linkData.slice(0, 5);
 
   const closeSidebar = () => {
     dispatch(setOpenSidebar(false));

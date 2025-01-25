@@ -48,7 +48,7 @@ const Tasks = () => {
       <div className='flex items-center justify-between mb-4'>
         <Title title={status ? `${status} Tasks` : "Tasks"} />
 
-        {user?.isAdmin &&
+        {(user?.isAdmin || user?.role === "ProjectManager") &&
           !status && (
             <Button
             onClick={() => setOpen(true)}
