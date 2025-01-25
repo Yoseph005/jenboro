@@ -33,7 +33,7 @@ const TaskCard = ({ task }) => {
 
   return (
     <>
-      <div onClick={() => navigateToTask()} className='w-full h-fit bg-white shadow-md p-4 rounded'>
+      <div className='w-full h-fit bg-white shadow-md p-4 rounded'>
         <div className='w-full flex justify-between'>
           <div
             className={clsx(
@@ -44,12 +44,11 @@ const TaskCard = ({ task }) => {
             <span className='text-lg'>{ICONS[task?.priority]}</span>
             <span className='uppercase'>{task?.priority} Priority</span>
           </div>
-
-          {user?.isAdmin && <TaskDialog task={task} />}
+          {user?.role === 'ProjectManager' && <TaskDialog task={task} />}
         </div>
 
-        <>
-          <div className='flex items-center gap-2'>
+        <div onClick={() => navigateToTask()}>
+          <div  className='flex items-center gap-2'>
             <div
               className={clsx("w-4 h-4 rounded-full", TASK_TYPE[task.stage])}
             />
@@ -65,7 +64,7 @@ const TaskCard = ({ task }) => {
           <span className='text-sm text-gray-600'>
             {formatDate(new Date(task?.date))}
           </span>
-        </>
+        </div>
 
         <div className='w-full border-t border-gray-200 my-2' />
         <div className='flex items-center justify-between mb-2'>
@@ -126,7 +125,7 @@ const TaskCard = ({ task }) => {
         <div className='w-full pb-2'>
           <button
             onClick={() => setOpen(true)}
-            disabled={user.isAdmin ? false : true}
+            disabled={!user.role === "ProjectManager"}
             className='w-full flex gap-4 items-center text-sm text-gray-500 font-semibold disabled:cursor-not-allowed disabled::text-gray-300'
           >
             <IoMdAdd className='text-lg' />
