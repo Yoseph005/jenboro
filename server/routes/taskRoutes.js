@@ -24,9 +24,9 @@ router.get("/dashboard", protectRoute, getDashboardStats); // Add the dashboard 
 router.get("/", protectRoute, getTasks);
 router.get("/:id", protectRoute, getTask);
 
-router.put("/create-subtask/:id", protectRoute, isAdminRoute, createSubTask);
-router.put("/update/:id", protectRoute, isAdminRoute, updateTask);
-router.put("/:id", protectRoute, isAdminRoute, trashTask);
+router.put("/create-subtask/:id", protectRoute,  createSubTask);
+router.put("/update/:id", protectRoute, updateTask);
+router.put("/:id", protectRoute,  trashTask);
 
 // router.delete(
 //   "/delete-restore/:id?",

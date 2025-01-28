@@ -12,6 +12,7 @@ import { app } from "../../utils/firebase"; // Updated import statement
 import { toast } from "sonner";
 import { useCreateTaskMutation, useUpdateTaskMutation } from "../../redux/slices/api/taskApiSlice";
 import TextField from "../TextField.jsx"; // Import the hooks
+import { dateFormatter } from "../../utils/index.js";
 
 const LISTS = ["TODO", "IN PROGRESS", "COMPLETED"];
 const PRIORIRY = ["HIGH", "MEDIUM", "NORMAL", "LOW"];
@@ -19,13 +20,22 @@ const PRIORIRY = ["HIGH", "MEDIUM", "NORMAL", "LOW"];
 const uploadedFileURLs = [];
 
 const AddTask = ({ open, setOpen , task}) => {
+  const defaultValues = {
+    title: task?.title || "",
+    date: dateFormatter(task?.date || new Date()),
+    team: [],
+    stage: "",
+    priority: "",
+    assets: [],
+  };
 
   const {
     register,
       reset,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({ defaultValues });
+
   const [description, setDescription] = useState()
   const [team, setTeam] = useState(task?.team || []);
   const [stage, setStage] = useState(task?.stage?.toUpperCase() || LISTS[0]);

@@ -24,7 +24,6 @@ const taskSchema = new Schema(
             "assigned",
             "started",
             "in progress",
-            "bug",
             "completed",
             "commented",
           ],
