@@ -57,13 +57,14 @@ const duplicateTask = async (req, res) => {
     const { id } = req.params;
 
     const task = await Task.findById(id);
+    console.log('dulpicate task', task);
 
     const newTask = await Task.create({
       ...task,
       title: task.title + " - Duplicate",
+      Description: task.description ? task.description : "",
     });
 
-    newTask.Description = task.description;
     newTask.team = task.team;
     newTask.subTasks = task.subTasks;
     newTask.assets = task.assets;

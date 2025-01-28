@@ -17,7 +17,7 @@ import { isAdminRoute, protectRoute } from "../middlewares/authMiddlewave.js";
 const router = express.Router();
 
 router.post("/create", protectRoute, createTask);
-router.post("/duplicate/:id", protectRoute, isAdminRoute, duplicateTask);
+router.post("/duplicate/:id", protectRoute, duplicateTask);
 router.post("/activity/:id", protectRoute, postTaskActivity);
 
 router.get("/dashboard", protectRoute, getDashboardStats); // Add the dashboard endpoint

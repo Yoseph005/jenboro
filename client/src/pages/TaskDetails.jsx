@@ -82,8 +82,6 @@ const act_types = [
   "Completed",
   "In Progress",
   "Commented",
-  "Bug",
-  "Assigned",
 ];
 
 const TaskDetails = () => {
