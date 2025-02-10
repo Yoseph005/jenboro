@@ -7,6 +7,7 @@ import { IoIosNotificationsOutline } from "react-icons/io";
 import { Link } from "react-router-dom";
 import ViewNotification from './ViewNotification';
 import { useGetNotificationsQuery, useMarkNotiAsReadMutation } from '../redux/slices/api/userApiSlice'; // Update the path as needed
+import { user } from "../assets/data";
 
 
 
@@ -72,7 +73,7 @@ const NotificationPanel = () => {
     setOpen(true);
     
   };
-
+  // if (user !== "Administrator") return null;
   const callsToAction = [
     { name: "Cancel", href: "#", icon: "" },
     {

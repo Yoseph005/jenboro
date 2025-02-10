@@ -38,6 +38,11 @@ const Login = () => {
     user && navigate("/dashboard");
   }, [user]);
 
+  const handleForgotPassword = () => {
+    console.log('forgot password')
+    navigate("/forgot-password");
+  };
+
   return (
     <div className='w-full min-h-screen flex items-center justify-center flex-col lg:flex-row bg-[#f3f4f6]'>
       <div className='w-full md:w-auto flex gap-0 md:gap-40 flex-col md:flex-row items-center justify-center'>
@@ -101,7 +106,8 @@ const Login = () => {
                 error={errors.password ? errors.password.message : ""}
               />
 
-              <span className='text-sm text-gray-500 hover:text-blue-600 hover:underline cursor-pointer'>
+              <span className='text-sm text-gray-500 hover:text-blue-600 hover:underline cursor-pointer'
+              onClick={handleForgotPassword}>
                 Forget Password?
               </span>
 

@@ -1,4 +1,4 @@
-import { duplicateTask, updateTask } from "../../../../../server/controllers/taskController";
+import { deleteRestoreTask, duplicateTask, postTaskActivity, updateTask } from "../../../../../server/controllers/taskController";
 import { apiSlice } from "../apiSlice";
 
 const TASK_URL = "/task";
@@ -60,6 +60,21 @@ export const taskApiSlice = apiSlice.injectEndpoints({
                 credentials: "include",
             }),
             }),
+        postTaskActivity: builder.mutation({
+            query: ({data, id}) => ({
+                url: `${TASK_URL}/activity/${id}`,
+                method: "PUT",
+                body: data,
+                credentials: "include",
+            }),
+            }),
+            deleteRestoreTask: builder.mutation({
+                query: ({id, actionType}) => ({
+                    url: `${TASK_URL}/delete-restore/${id}?actionType=${actionType}`,
+                    method: "DELETE",
+                    credentials: "include",
+                }),
+                }),
     }),
 });
 
@@ -70,5 +85,7 @@ export const {
     useDuplicateTaskMutation, 
     useUpdateTaskMutation, 
     useTrashTaskMutation,
-    useCreateSubTaskMutation
+    useCreateSubTaskMutation,
+    usePostTaskActivityMutation,
+    useDeleteRestoreTaskMutation
  } = taskApiSlice;

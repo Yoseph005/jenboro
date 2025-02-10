@@ -10,6 +10,8 @@ const userSchema = new Schema(
     isAdmin: { type: Boolean, required: true, default: false },
     tasks: [{ type: Schema.Types.ObjectId, ref: "Task" }],
     isActive: { type: Boolean, required: true, default: true },
+    resetToken : { type: String, required: false, default: '' },
+
   },
   { timestamps: true }
 );

@@ -2,6 +2,8 @@ import { response } from "express";
 import User from "../models/user.js";
 import { createJWT } from "../utils/index.js";
 import Notice from "../models/notification.js";
+import {sendResetPasswordEmail} from "../controllers/email.js";
+import jwt from "jsonwebtoken";
 
 export const registerUser = async (req, res) => {
   try {
@@ -248,5 +250,69 @@ export const deleteUserProfile = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(400).json({ status: false, message: error.message });
+  }
+};
+
+export const forgotPaswword = async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ error: 'Email is required' });
+  }
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+
+  const resetToken = Math.random().toString(36).substring(2);
+  const token = jwt.sign({ id: user._id }, "JWT_SECRET7864654545645347646545jkghg-kjhkgk", { expiresIn: '1h' });
+
+  user.resetToken = token;
+
+  const resetLink = `http://localhost:3000/reset-password?token=${token}&email=${email}`;
+
+  console.log(token)
+
+  try {
+    await sendResetPasswordEmail(email, resetLink);
+    res.status(200).json({ message: 'Password reset email sent successfully.' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to send reset email.' });
+  }
+};
+
+
+export const forgotPaswwordVerification = async (req, res) => {
+  const { token, newPassword } = req.body;
+
+  if (!token || !newPassword) {
+    return res.status(400).json({ message: 'Token and new password are required.' });
+  }
+
+  try {
+    // Verify the token
+    const decoded = jwt.verify(token, "JWT_SECRET7864654545645347646545jkghg-kjhkgk");
+    const userId = decoded.id;
+
+    // Find the user by ID
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+
+    // Save the updated user
+    await user.save();
+
+    res.status(200).json({ message: 'Password has been reset successfully.' });
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ message: 'Invalid or expired token.' });
   }
 };

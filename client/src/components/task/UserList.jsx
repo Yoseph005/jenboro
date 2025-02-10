@@ -8,16 +8,14 @@ import { MdCheck } from "react-icons/md";
 import { useGetTeamListQuery } from "../../redux/slices/api/userApiSlice";
 
 const UserList = ({ setTeam, team }) => {
-  const {data, isLoading} = useGetTeamListQuery;
+  const {data, isLoading} = useGetTeamListQuery();
   const [selectedUsers, setSelectedUsers] = useState([]);
-
-  console.log(data)
 
   const handleChange = (el) => {
     setSelectedUsers(el);
     setTeam(el?.map((u) => u._id));
   };
- 
+  
   useEffect(() => {
     if (team?.length < 1) {
       data && setSelectedUsers([data[0]]);

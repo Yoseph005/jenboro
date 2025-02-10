@@ -18,7 +18,10 @@ import Tabs from "../components/Tabs";
 import { PRIOTITYSTYELS, TASK_TYPE, getInitials } from "../utils";
 import Loading from "../components/Loader";
 import Button from "../components/Button";
-import {useGetAllTaskQuery} from "../redux/slices/api/taskApiSlice.js";
+import {useGetAllTaskQuery, usePostTaskActivityMutation} from "../redux/slices/api/taskApiSlice.js";
+import { toast } from "sonner";
+import { useSelector } from "react-redux";
+
 
 const assets = [
   "https://images.pexels.com/photos/2418664/pexels-photo-2418664.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
@@ -55,7 +58,7 @@ const TASKTYPEICON = {
       <FaThumbsUp size={20} />
     </div>
   ),
-  assigned: (
+  report: (
     <div className='w-6 h-6 flex items-center justify-center rounded-full bg-gray-500 text-white'>
       <FaUser size={14} />
     </div>
@@ -82,14 +85,16 @@ const act_types = [
   "Completed",
   "In Progress",
   "Commented",
+  "Report",
 ];
 
 const TaskDetails = () => {
   const { id } = useParams();
 
-  const {data, isLoading} = useGetAllTaskQuery({
+  const {data, isLoading, refetch} = useGetAllTaskQuery({
     strQuery: status, isTrashed:"", search:""
   });
+
 
   const [selected, setSelected] = useState(0);
   const task = data?.tasks.filter((el) => el._id === id)[0];
@@ -125,6 +130,11 @@ const TaskDetails = () => {
                     <span className='text-black uppercase'>{task?.stage}</span>
                   </div>
                 </div>
+
+                    {task?.description ? (
+                        <p>Description: {task?.description}</p>
+                    ) : 
+                    <p>Description: No Description</p>}
 
                 <p className='text-gray-500'>
                   Created At: {new Date(task?.date).toDateString()}
@@ -220,20 +230,41 @@ const TaskDetails = () => {
           </>
         ) : (
           <>
-            <Activities activity={task?.activities} id={id} />
+            <Activities activity={task?.activities} id={id} refetch={refetch} />
           </>
         )}
       </Tabs>
     </div>
   );
-};
+};  
 
-const Activities = ({ activity, id }) => {
+const Activities = ({ activity, id, refetch }) => {
   const [selected, setSelected] = useState(act_types[0]);
   const [text, setText] = useState("");
-  const isLoading = false;
+  const { user } = useSelector((state) => state.auth);
+  
+  const [postActivity, {isLoading}] = usePostTaskActivityMutation();
 
-  const handleSubmit = async () => {};
+
+  const handleSubmit = async () => {
+    try {
+      const activityData = {
+        type: selected?.toLowerCase(),
+        activity: text,
+      }
+      const result = await postActivity({
+        data: activityData,
+        id
+      }).unwrap();
+
+      setText("");
+        toast.success(result?.message);
+        refetch();
+    }catch (error){
+      console.log(error);
+      toast.error(error?.data?.message || error.error)
+    }
+  };
 
   const Card = ({ item }) => {
     return (
@@ -269,7 +300,7 @@ const Activities = ({ activity, id }) => {
             <Card
               key={index}
               item={el}
-              isConnected={index < activity.length - 1}
+              isConnected={index < activity?.length - 1}
             />
           ))}
         </div>
@@ -280,17 +311,21 @@ const Activities = ({ activity, id }) => {
           Add Activity
         </h4>
         <div className='w-full flex flex-wrap gap-5'>
-          {act_types.map((item, index) => (
-            <div key={item} className='flex gap-2 items-center'>
-              <input
-                type='checkbox'
-                className='w-4 h-4'
-                checked={selected === item ? true : false}
-                onChange={(e) => setSelected(item)}
-              />
-              <p>{item}</p>
-            </div>
-          ))}
+        {act_types.map((item, index) =>
+  (user?.role === "Finance" && item === "Completed") ||
+  (user?.role !== "Finance" && item !== "Completed") ? (
+    <div key={index} className="flex gap-2 items-center">
+      <input
+        type="checkbox"
+        className="w-4 h-4"
+        checked={selected === item}
+        onChange={() => setSelected(item)}
+      />
+      <p>{item}</p>
+    </div>
+  ) : null
+)}
+  
           <textarea
             rows={10}
             value={text}

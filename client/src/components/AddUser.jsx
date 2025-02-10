@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { useUpdateUserMutation } from "../redux/slices/api/userApiSlice";
 import { setCredentials } from "../redux/slices/authSlice";
 
-const ROLES = ["Admin", "Forman", "Architect", "Finance", "ProjectManager"];
+const ROLES = ["Administrator", "Forman", "Architect", "Finance", "ProjectManager"];
 
 const AddUser = ({ open, setOpen, userData }) => {
   let defaultValues = userData ?? {};

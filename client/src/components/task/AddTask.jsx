@@ -131,7 +131,7 @@ const AddTask = ({ open, setOpen , task}) => {
             as='h2'
             className='text-base font-bold leading-6 text-gray-900 mb-4'
           >
-            {task ? "UPDATE TASK" : "ADD PROJECT"}
+            {task ? "UPDATE PROJECT" : "ADD PROJECT"}
           </Dialog.Title>
 
           <div className='mt-2 flex flex-col gap-6'>
@@ -139,7 +139,7 @@ const AddTask = ({ open, setOpen , task}) => {
               placeholder='Project Title'
               type='text'
               name='title'
-              label='Task Title'
+              label='Project Title'
               className='w-full rounded'
               register={register("title", { required: "Title is required" })}
               error={errors.title ? errors.title.message : ""}
@@ -148,7 +148,7 @@ const AddTask = ({ open, setOpen , task}) => {
                 placeholder="Project Description"
                 type="text"
                 name="description"
-                label="Task Description"
+                label="Project Description"
                 className="w-full rounded"
                 register={register("description", { required: "Description is required" })}
                 error={errors.description ? errors.description.message : ""}

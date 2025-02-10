@@ -9,14 +9,14 @@ const createTask = async (req, res) => {
 
     const { title, description, team, stage, date, priority, assets } = req.body;
 
-    let text = "New task has been assigned to you";
+    let text = "New project has been assigned to you";
     if (team?.length > 1) {
       text = text + ` and ${team?.length - 1} others.`;
     }
 
     text =
       text +
-      ` The task priority is set a ${priority} priority, so check and act accordingly. The task date is ${new Date(
+      ` The project priority is set a ${priority} priority, so check and act accordingly. The task date is ${new Date(
         date
       ).toDateString()}. Thank you!!!`;
 
@@ -45,7 +45,7 @@ const createTask = async (req, res) => {
 
     res
       .status(200)
-      .json({ status: true, task, message: "Task created successfully." });
+      .json({ status: true, task, message: "Project created successfully." });
   } catch (error) {
     console.log(error);
     return res.status(400).json({ status: false, message: error.message });
@@ -72,16 +72,16 @@ const duplicateTask = async (req, res) => {
 
     await newTask.save();
 
-    let text = "New task has been assigned to you";
+    let text = "New Project has been assigned to you";
     if (task.team.length > 1) {
       text = text + ` and ${task.team.length - 1} others.`;
     }
 
     text =
       text +
-      ` The task priority is set a ${
+      ` The Project priority is set a ${
         task.priority
-      } priority, so check and act accordingly. The task date is ${task.date.toDateString()}. Thank you!!!`;
+      } priority, so check and act accordingly. The Project date is ${task.date.toDateString()}. Thank you!!!`;
 
     await Notice.create({
       team: task.team,
@@ -91,7 +91,7 @@ const duplicateTask = async (req, res) => {
 
     res
       .status(200)
-      .json({ status: true, message: "Task duplicated successfully." });
+      .json({ status: true, message: "Project duplicated successfully." });
   } catch (error) {
     console.log(error);
     return res.status(400).json({ status: false, message: error.message });
@@ -100,6 +100,7 @@ const duplicateTask = async (req, res) => {
 
 const postTaskActivity = async (req, res) => {
   try {
+    console.log('check')
     const { id } = req.params;
     const { userId } = req.user;
     const { type, activity } = req.body;
@@ -272,7 +273,7 @@ const createSubTask = async (req, res) => {
 
     res
       .status(200)
-      .json({ status: true, message: "SubTask added successfully." });
+      .json({ status: true, message: "Task added successfully." });
   } catch (error) {
     console.log(error);
     return res.status(400).json({ status: false, message: error.message });
@@ -297,7 +298,7 @@ const updateTask = async (req, res) => {
 
     res
       .status(200)
-      .json({ status: true, message: "Task duplicated successfully." });
+      .json({ status: true, message: "Project duplicated successfully." });
   } catch (error) {
     console.log(error);
     return res.status(400).json({ status: false, message: error.message });
@@ -316,7 +317,7 @@ const trashTask = async (req, res) => {
 
     res.status(200).json({
       status: true,
-      message: `Task trashed successfully.`,
+      message: `Project trashed successfully.`,
     });
   } catch (error) {
     console.log(error);

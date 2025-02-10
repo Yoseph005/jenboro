@@ -14,9 +14,11 @@ import Trash from "./pages/Trash";
 import Users from "./pages/Users";
 import Dashboard from "./pages/dashboard";
 import { setOpenSidebar } from "./redux/slices/authSlice";
-import FinanceDashboard from "./pages/FinanceDashboard";
-import ArchitectDashboard from "./pages/ArchitectDashboard";
-import ProjectManagerDashboard from "./pages/ProjectManagerDashboard";
+// import FinanceDashboard from "./pages/FinanceDashboard";
+// import ArchitectDashboard from "./pages/ArchitectDashboard";
+// import ProjectManagerDashboard from "./pages/ProjectManagerDashboard";
+import ForgotPassword from "./components/forgot-password";
+import PasswordResetForm from "./components/resetPassword";
 
 function Layout() {
   const { user } = useSelector((state) => state.auth);
@@ -99,6 +101,8 @@ function App() {
   return (
     <main className='w-full min-h-screen bg-[#f3f4f6] '>
       <Routes>
+      <Route path='/forgot-password' element={<ForgotPassword />} />
+      <Route path='/reset-password' element={<PasswordResetForm />} />
         <Route element={<Layout />}>
           <Route index path='/' element={<Navigate to='/dashboard' />} />
           <Route path='/dashboard' element={<Dashboard />} />
@@ -109,9 +113,11 @@ function App() {
           <Route path='/team' element={<Users />} />
           <Route path='/trashed' element={<Trash />} />
           <Route path='/task/:id' element={<TaskDetails />} />
-          <Route path='/financedashboard' element={<FinanceDashboard />} />
-          <Route path='/architectdashboard' element={<ArchitectDashboard />} />
-          <Route path='/projectmanagerdashboard' element={<ProjectManagerDashboard />} />
+          {/* <Route path='/financedashboard' element={<FinanceDashboard />} />
+          <Route path='/architectdashboard' element={<ArchitectDashboard />} /> */}
+          {/* <Route path='/projectmanagerdashboard' element={<ProjectManagerDashboard />} /> */}
+          
+
         </Route>
 
         <Route path='/log-in' element={<Login />} />
